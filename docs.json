@@ -11,60 +11,31 @@
     "dark": "#0050B4"
   },
   "theme": "mint",
-  "topbarLinks": [
-    {
-      "name": "Support",
-      "url": "mailto:support@often-travel.com"
-    }
-  },
+  "topbarLinks": [{
+    "name": "Support",
+    "url": "mailto:support@often-travel.com"
+  }],
   "topbarCtaButton": {
     "name": "Dashboard",
     "url": "https://dashboard.often-travel.com"
   },
-  "anchors": [
-    {
-      "name": "API Reference",
-      "icon": "rectangle-terminal",
-      "url": "api-reference"
-    },
-    {
-      "name": "GitHub",
-      "icon": "github",
-      "url": "https://github.com/often-travel"
-    }
-  ],
+  "anchors": [{
+    "name": "API Reference",
+    "icon": "rectangle-terminal",
+    "url": "api-reference"
+  }, {
+    "name": "GitHub",
+    "icon": "github",
+    "url": "https://github.com/often-travel"
+  }],
   "navigation": {
-    "getting-started": {
+    "Getting_Started": {
       "group": "Getting Started",
-      "pages": [
-        "introduction",
-        "quickstart"
-      ]
+      "pages": ["introduction", "quickstart"]
     },
-    "api-reference": {
+    "API_Reference": {
       "group": "API Reference",
-      "pages": [
-        {
-          "group": "Authentication",
-          "pages": [
-            "api-reference/authentication"
-          ]
-        },
-        {
-          "group": "Trip Management",
-          "pages": [
-            "api-reference/trips",
-            "api-reference/itineraries",
-            "api-reference/granular-trip-management"
-          ]
-        },
-        {
-          "group": "Integrations",
-          "pages": [
-            "api-reference/xs2event-integration"
-          ]
-        }
-      ]
+      "pages": ["api-reference/authentication", "api-reference/trips", "api-reference/itineraries", "api-reference/granular-trip-management", "api-reference/xs2event-integration"]
     }
   },
   "footerSocials": {
