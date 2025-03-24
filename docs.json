@@ -10,6 +10,7 @@
     "light": "#4D9CFF",
     "dark": "#0050B4"
   },
+  "theme": "mint",
   "topbarLinks": [
     {
       "name": "Support",
@@ -58,40 +59,17 @@
           ]
         },
         {
-          "group": "Booking & Payment",
-          "pages": [
-            "api-reference/orders",
-            "api-reference/payments"
-          ]
-        },
-        {
           "group": "Integrations",
           "pages": [
             "api-reference/xs2event-integration"
           ]
         }
       ]
-    },
-    {
-      "group": "Data Models",
-      "pages": [
-        "models/trip",
-        "models/itinerary",
-        "models/user",
-        "models/order"
-      ]
-    },
-    {
-      "group": "Guides",
-      "pages": [
-        "guides/authentication",
-        "guides/creating-trips",
-        "guides/booking-flow"
-      ]
     }
   ],
   "footerSocials": {
-    "twitter": "https://twitter.com/oftentrips",
-    "linkedin": "https://www.linkedin.com/company/often-travel"
+    "twitter": "https://twitter.com/oftentravel",
+    "instagram": "https://instagram.com/oftentravel",
+    "linkedin": "https://linkedin.com/company/often-travel"
   }
 }
