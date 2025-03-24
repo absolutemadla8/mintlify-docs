@@ -1,0 +1,147 @@
+---
+title: 'Authentication'
+description: 'How to authenticate with the Often Trips API'
+---
+
+# Authentication
+
+Often Trips uses OTP (One-Time Password) based authentication with Laravel Sanctum for API token management.
+
+## Authentication Flow
+
+1. User requests an OTP to their phone number
+2. System sends the OTP via SMS/WhatsApp
+3. User verifies the OTP
+4. On successful verification, a Sanctum token is provided for API access
+
+## Authentication Endpoints
+
+### Send OTP
+
+```http
+POST /api/auth/send-otp
+```
+
+Send a one-time password to the user's phone number.
+
+#### Request Body
+
+```json
+{
+  "phone": "9876543210", 
+  "country_code": "+91" 
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "OTP sent successfully",
+  "reference_id": "abc123def456"
+}
+```
+
+### Resend OTP
+
+```http
+POST /api/auth/resend-otp
+```
+
+Resend a one-time password if the original expires.
+
+#### Request Body
+
+```json
+{
+  "reference_id": "abc123def456"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "OTP resent successfully",
+  "reference_id": "abc123def456"
+}
+```
+
+### Verify OTP
+
+```http
+POST /api/auth/verify-otp
+```
+
+Verify the OTP and obtain an authentication token.
+
+#### Request Body
+
+```json
+{
+  "reference_id": "abc123def456",
+  "otp": "123456"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "OTP verified successfully",
+  "token": "YOUR_AUTHENTICATION_TOKEN",
+  "user": {
+    "id": "user-uuid",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "9876543210"
+  }
+}
+```
+
+## Using Authentication Tokens
+
+For authenticated requests, include the token in the Authorization header:
+
+```http
+Authorization: Bearer YOUR_AUTHENTICATION_TOKEN
+```
+
+## Trip-Specific Authentication
+
+For users accessing a specific trip without registering (e.g., from a link), use the trip authentication endpoint:
+
+```http
+POST /api/trip/authenticate
+```
+
+#### Request Body
+
+```json
+{
+  "booking_id": "BK123456",
+  "last_name": "Doe"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "token": "TRIP_SPECIFIC_TOKEN",
+  "user": {
+    "name": "John Doe",
+    "email": "john@example.com"
+  },
+  "trip": {
+    "id": "trip-uuid",
+    "name": "Weekend Getaway to Goa"
+  }
+}
+```
+
+This trip-specific token has limited abilities for viewing and updating only the specified trip.

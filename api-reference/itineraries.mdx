@@ -1,0 +1,207 @@
+---
+title: 'Itineraries'
+description: 'API endpoints for managing itineraries and itinerary items'
+---
+
+# Itineraries API
+
+Itineraries represent the detailed plan for a trip, including accommodations, activities, and transportation.
+
+## Create Trip Itinerary
+
+```http
+POST /api/granular/itineraries
+```
+
+Creates a new itinerary for a trip.
+
+### Request Body
+
+```json
+{
+  "trip_id": "trip-uuid",
+  "name": "Premium Package",
+  "inclusions": ["5-star accommodations", "Private transfers", "Daily breakfast"],
+  "property_rating": 5,
+  "is_group_trip": false,
+  "starting_price": 75000
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "itinerary-uuid",
+    "trip_id": "trip-uuid",
+    "name": "Premium Package",
+    "inclusions": ["5-star accommodations", "Private transfers", "Daily breakfast"],
+    "property_rating": 5,
+    "is_group_trip": false,
+    "starting_price": 75000,
+    "created_at": "2023-10-26T15:30:00Z",
+    "updated_at": "2023-10-26T15:30:00Z"
+  }
+}
+```
+
+## Add Destination to Itinerary
+
+```http
+POST /api/granular/itinerary-destinations
+```
+
+Adds a destination to an itinerary with specific details.
+
+### Request Body
+
+```json
+{
+  "itinerary_id": "itinerary-uuid",
+  "destination_id": "destination-uuid",
+  "nights": 3,
+  "order": 1
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "itinerary-destination-uuid",
+    "itinerary_id": "itinerary-uuid",
+    "destination_id": "destination-uuid",
+    "nights": 3,
+    "order": 1,
+    "created_at": "2023-10-26T15:35:00Z",
+    "updated_at": "2023-10-26T15:35:00Z",
+    "destination": {
+      "id": "destination-uuid",
+      "name": "Jaipur",
+      "country_id": "country-uuid"
+    }
+  }
+}
+```
+
+## Add Itinerary Item
+
+```http
+POST /api/granular/itinerary-items
+```
+
+Adds an item (hotel, activity, flight, etc.) to an itinerary.
+
+### Request Body
+
+```json
+{
+  "itinerary_id": "itinerary-uuid",
+  "day_number": 1,
+  "item_type": "hotel",
+  "hotel_id": "hotel-uuid",
+  "room_id": "room-uuid",
+  "start_datetime": "2023-12-01T14:00:00",
+  "order": 1,
+  "price": 12000,
+  "discounted_price": 10800,
+  "show_price": true,
+  "board_type": "breakfast"
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "item-uuid",
+    "itinerary_id": "itinerary-uuid",
+    "day_number": 1,
+    "item_type": "hotel",
+    "hotel_id": "hotel-uuid",
+    "room_id": "room-uuid",
+    "start_datetime": "2023-12-01T14:00:00",
+    "order": 1,
+    "price": 12000,
+    "discounted_price": 10800,
+    "show_price": true,
+    "board_type": "breakfast",
+    "created_at": "2023-10-26T15:40:00Z",
+    "updated_at": "2023-10-26T15:40:00Z",
+    "hotel": {
+      "id": "hotel-uuid",
+      "name": "Royal Palace Hotel",
+      "rating": 5
+    }
+  }
+}
+```
+
+## Add Itinerary Item Option
+
+```http
+POST /api/granular/itinerary-item-options
+```
+
+Adds an alternative option for an itinerary item, allowing travelers to choose between options.
+
+### Request Body
+
+```json
+{
+  "itinerary_item_id": "item-uuid",
+  "hotel_id": "alternate-hotel-uuid",
+  "room_id": "alternate-room-uuid",
+  "price": 15000,
+  "discounted_price": 13500,
+  "is_default": false,
+  "description": "Upgrade to a luxury suite with private pool"
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "option-uuid",
+    "itinerary_item_id": "item-uuid",
+    "hotel_id": "alternate-hotel-uuid",
+    "room_id": "alternate-room-uuid",
+    "price": 15000,
+    "discounted_price": 13500,
+    "is_default": false,
+    "description": "Upgrade to a luxury suite with private pool",
+    "created_at": "2023-10-26T15:45:00Z",
+    "updated_at": "2023-10-26T15:45:00Z",
+    "hotel": {
+      "id": "alternate-hotel-uuid",
+      "name": "Grand Luxury Resort",
+      "rating": 5
+    }
+  }
+}
+```
+
+## Swap Itinerary Option
+
+```http
+POST /api/trips/{tripId}/options/{optionId}/swap
+```
+
+Swaps the default option with an alternative option for an itinerary item.
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "Option swapped successfully",
+  

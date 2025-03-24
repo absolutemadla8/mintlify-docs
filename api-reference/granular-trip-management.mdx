@@ -1,0 +1,492 @@
+---
+title: 'Granular Trip Management'
+description: 'API endpoints for detailed, granular management of trips and itineraries'
+---
+
+# Granular Trip Management API
+
+The Granular Trip Management API allows for precise control over trips, itineraries, and their components. These endpoints provide more fine-grained control than the standard trip endpoints and are typically used by administrative interfaces or sophisticated client applications.
+
+## Authentication
+
+All Granular Trip Management endpoints require authentication using the `auth:sanctum` middleware. Include your authentication token in the request header:
+
+```http
+Authorization: Bearer YOUR_AUTH_TOKEN
+```
+
+## Trip Creation
+
+### Create Trip Only
+
+```http
+POST /api/granular/trips
+```
+
+Creates a new trip without associated itineraries.
+
+#### Request Body
+
+```json
+{
+  "name": "Weekend Getaway to Goa",
+  "description": "Enjoy a relaxing weekend on Goa's beautiful beaches",
+  "highlight": "Stay at premium beachfront property",
+  "adults": 2,
+  "children": 0,
+  "rooms": 1,
+  "for_listing": true,
+  "start_date": "2023-12-15",
+  "end_date": "2023-12-17",
+  "nights": 2,
+  "price": 25000,
+  "discounted_price": 22000,
+  "unit": "person",
+  "currency": "INR",
+  "is_tax_included": true,
+  "images": ["image1.jpg", "image2.jpg"],
+  "advisor_id": "advisor-uuid",
+  "country_id": "country-uuid",
+  "booking_validity": "2023-12-10",
+  "travel_validity": "2023-12-31",
+  "inclusions": ["Accommodation", "Breakfast", "Airport transfers"],
+  "deal_type": "weekend_special",
+  "is_stay_package": true
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Trip created successfully",
+  "data": {
+    "id": "trip-uuid",
+    "name": "Weekend Getaway to Goa",
+    "description": "Enjoy a relaxing weekend on Goa's beautiful beaches",
+    "highlight": "Stay at premium beachfront property",
+    "adults": 2,
+    "children": 0,
+    "rooms": 1,
+    "for_listing": true,
+    "start_date": "2023-12-15",
+    "end_date": "2023-12-17",
+    "nights": 2,
+    "price": 25000,
+    "discounted_price": 22000,
+    "unit": "person",
+    "currency": "INR",
+    "is_tax_included": true,
+    "images": ["image1.jpg", "image2.jpg"],
+    "advisor_id": "advisor-uuid",
+    "country_id": "country-uuid",
+    "booking_validity": "2023-12-10",
+    "travel_validity": "2023-12-31",
+    "inclusions": ["Accommodation", "Breakfast", "Airport transfers"],
+    "deal_type": "weekend_special",
+    "is_stay_package": true,
+    "created_at": "2023-10-26T12:00:00Z",
+    "updated_at": "2023-10-26T12:00:00Z"
+  }
+}
+```
+
+## Itinerary Management
+
+### Create Trip Itinerary
+
+```http
+POST /api/granular/itineraries
+```
+
+Creates a new itinerary for an existing trip.
+
+#### Request Body
+
+```json
+{
+  "trip_id": "trip-uuid",
+  "name": "Standard Package",
+  "inclusions": ["3-star accommodation", "Daily breakfast", "Airport transfers"],
+  "property_rating": 3,
+  "is_group_trip": false,
+  "starting_price": 22000
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Itinerary created successfully",
+  "data": {
+    "id": "itinerary-uuid",
+    "trip_id": "trip-uuid",
+    "name": "Standard Package",
+    "inclusions": ["3-star accommodation", "Daily breakfast", "Airport transfers"],
+    "property_rating": 3,
+    "is_group_trip": false,
+    "starting_price": 22000,
+    "created_at": "2023-10-26T12:15:00Z",
+    "updated_at": "2023-10-26T12:15:00Z"
+  }
+}
+```
+
+## Itinerary Item Management
+
+### Add Itinerary Item
+
+```http
+POST /api/granular/itinerary-items
+```
+
+Adds an item to an itinerary. Items can be accommodations, activities, flights, etc.
+
+#### Request Body
+
+```json
+{
+  "itinerary_id": "itinerary-uuid",
+  "day_number": 1,
+  "item_type": "hotel",
+  "hotel_id": "hotel-uuid",
+  "room_id": "room-uuid",
+  "start_datetime": "2023-12-15T14:00:00",
+  "order": 1,
+  "price": 15000,
+  "discounted_price": 13500,
+  "show_price": true,
+  "board_type": "breakfast"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Itinerary item added successfully",
+  "data": {
+    "id": "item-uuid",
+    "itinerary_id": "itinerary-uuid",
+    "day_number": 1,
+    "item_type": "hotel",
+    "hotel_id": "hotel-uuid",
+    "room_id": "room-uuid",
+    "start_datetime": "2023-12-15T14:00:00",
+    "order": 1,
+    "price": 15000,
+    "discounted_price": 13500,
+    "show_price": true,
+    "board_type": "breakfast",
+    "created_at": "2023-10-26T12:30:00Z",
+    "updated_at": "2023-10-26T12:30:00Z"
+  }
+}
+```
+
+### Add Itinerary Item Option
+
+```http
+POST /api/granular/itinerary-item-options
+```
+
+Adds an option to an itinerary item, providing alternatives (e.g., different hotels or room types).
+
+#### Request Body
+
+```json
+{
+  "itinerary_item_id": "item-uuid",
+  "hotel_id": "alternative-hotel-uuid",
+  "room_id": "alternative-room-uuid",
+  "price": 18000,
+  "discounted_price": 16200,
+  "is_default": false,
+  "description": "Upgrade to a beachfront property"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "message": "Item option added successfully",
+  "data": {
+    "id": "option-uuid",
+    "itinerary_item_id": "item-uuid",
+    "hotel_id": "alternative-hotel-uuid",
+    "room_id": "alternative-room-uuid",
+    "price": 18000,
+    "discounted_price": 16200,
+    "is_default": false,
+    "description": "Upgrade to a beachfront property",
+    "created_at": "2023-10-26T12:45:00Z",
+    "updated_at": "2023-10-26T12:45:00Z"
+  }
+}
+```
+
+## Hotel and Activity Discovery
+
+### Get Hotels for Day
+
+```http
+POST /api/granular/hotels/by-day
+```
+
+Retrieves hotels available for a specific day in the itinerary.
+
+#### Request Body
+
+```json
+{
+  "itinerary_id": "itinerary-uuid",
+  "day_number": 1,
+  "search_term": "beach"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "hotel-uuid-1",
+      "name": "Beachside Resort",
+      "rating": 4,
+      "address": "Beach Road, Calangute, Goa",
+      "latitude": 15.5513,
+      "longitude": 73.7637,
+      "thumbnail": "beachside-resort.jpg",
+      "price_starting_from": 12000,
+      "available_rooms": [
+        {
+          "id": "room-uuid-1",
+          "name": "Deluxe Room",
+          "price": 12000,
+          "discounted_price": 10800
+        },
+        {
+          "id": "room-uuid-2",
+          "name": "Premium Room",
+          "price": 15000,
+          "discounted_price": 13500
+        }
+      ]
+    },
+    {
+      "id": "hotel-uuid-2",
+      "name": "Seaside Inn",
+      "rating": 3,
+      "address": "Candolim Beach, Goa",
+      "latitude": 15.5185,
+      "longitude": 73.7626,
+      "thumbnail": "seaside-inn.jpg",
+      "price_starting_from": 8000,
+      "available_rooms": [
+        {
+          "id": "room-uuid-3",
+          "name": "Standard Room",
+          "price": 8000,
+          "discounted_price": 7200
+        },
+        {
+          "id": "room-uuid-4",
+          "name": "Deluxe Room",
+          "price": 10000,
+          "discounted_price": 9000
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Get Activities for Day
+
+```http
+POST /api/granular/activities/by-day
+```
+
+Retrieves activities available for a specific day in the itinerary.
+
+#### Request Body
+
+```json
+{
+  "itinerary_id": "itinerary-uuid",
+  "day_number": 2,
+  "search_term": "cruise"
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "activity-uuid-1",
+      "name": "Sunset Cruise with Dinner",
+      "description": "Enjoy a beautiful sunset while cruising on the Arabian Sea with dinner included",
+      "duration_hours": 3,
+      "price": 2500,
+      "discounted_price": 2200,
+      "thumbnail": "sunset-cruise.jpg",
+      "location": {
+        "name": "Panjim Jetty",
+        "latitude": 15.4989,
+        "longitude": 73.8278
+      },
+      "time_slots": [
+        {
+          "id": "slot-uuid-1",
+          "start_time": "17:00",
+          "end_time": "20:00"
+        }
+      ]
+    },
+    {
+      "id": "activity-uuid-2",
+      "name": "Dolphin Spotting Cruise",
+      "description": "Spot dolphins in their natural habitat on this exciting morning cruise",
+      "duration_hours": 2,
+      "price": 1800,
+      "discounted_price": 1500,
+      "thumbnail": "dolphin-cruise.jpg",
+      "location": {
+        "name": "Sinquerim Beach",
+        "latitude": 15.4989,
+        "longitude": 73.7665
+      },
+      "time_slots": [
+        {
+          "id": "slot-uuid-2",
+          "start_time": "08:00",
+          "end_time": "10:00"
+        },
+        {
+          "id": "slot-uuid-3",
+          "start_time": "10:30",
+          "end_time": "12:30"
+        }
+      ]
+    }
+  ]
+}
+```
+
+### Get Hotels by Country
+
+```http
+POST /api/granular/hotels/by-country
+```
+
+Retrieves hotels available in a specific country.
+
+#### Request Body
+
+```json
+{
+  "country_id": "country-uuid",
+  "search_term": "luxury",
+  "min_rating": 4,
+  "page": 1,
+  "limit": 10
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "hotel-uuid-1",
+      "name": "Luxury Beach Resort",
+      "rating": 5,
+      "address": "Beach Road, Calangute, Goa",
+      "latitude": 15.5513,
+      "longitude": 73.7637,
+      "thumbnail": "luxury-beach-resort.jpg",
+      "price_starting_from": 18000,
+      "destination": {
+        "id": "destination-uuid",
+        "name": "Goa"
+      }
+    },
+    // More hotels...
+  ],
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 3,
+    "path": "/api/granular/hotels/by-country",
+    "per_page": 10,
+    "to": 10,
+    "total": 28
+  }
+}
+```
+
+### Get Activities by Country
+
+```http
+POST /api/granular/activities/by-country
+```
+
+Retrieves activities available in a specific country.
+
+#### Request Body
+
+```json
+{
+  "country_id": "country-uuid",
+  "search_term": "adventure",
+  "max_price": 5000,
+  "page": 1,
+  "limit": 10
+}
+```
+
+#### Response
+
+```json
+{
+  "success": true,
+  "data": [
+    {
+      "id": "activity-uuid-1",
+      "name": "Water Sports Adventure Package",
+      "description": "Experience parasailing, jet skiing, and banana boat rides in one package",
+      "duration_hours": 4,
+      "price": 3500,
+      "discounted_price": 3000,
+      "thumbnail": "water-sports.jpg",
+      "destination": {
+        "id": "destination-uuid",
+        "name": "Goa"
+      }
+    },
+    // More activities...
+  ],
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 5,
+    "path": "/api/granular/activities/by-country",
+    "per_page": 10,
+    "to": 10,
+    "total": 45
+  }
+}
+```

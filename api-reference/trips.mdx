@@ -1,0 +1,425 @@
+---
+title: 'Trips'
+description: 'API endpoints for managing trips'
+---
+
+# Trips API
+
+Trips are the core resource of the Often Trips platform, representing travel packages or custom travel plans.
+
+## List Trips
+
+```http
+GET /api/trips
+```
+
+Returns a list of available trips.
+
+### Query Parameters
+
+| Parameter | Type | Description |
+|-----------|------|-------------|
+| `limit` | integer | Number of results per page (default: 20) |
+| `page` | integer | Page number for pagination (default: 1) |
+| `search` | string | Search term for filtering trips |
+| `country_id` | string | Filter by country UUID |
+| `destination_id` | string | Filter by destination UUID |
+| `min_price` | number | Minimum price filter |
+| `max_price` | number | Maximum price filter |
+| `date_from` | date | Filter by trips starting after this date |
+| `date_to` | date | Filter by trips ending before this date |
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "id": "trip-uuid-1",
+      "name": "Magical Rajasthan Tour",
+      "description": "Experience the royal heritage of Rajasthan",
+      "highlight": "Visit majestic forts and palaces",
+      "start_date": "2023-12-01",
+      "end_date": "2023-12-08",
+      "nights": 7,
+      "price": 65000,
+      "discounted_price": 59000,
+      "currency": "INR",
+      "is_tax_included": true,
+      "images": ["image1.jpg", "image2.jpg"],
+      "country": {
+        "id": "country-uuid",
+        "name": "India",
+        "code": "IN"
+      },
+      "advisor": {
+        "id": "advisor-uuid",
+        "name": "Travel Expert",
+        "image": "advisor.jpg"
+      },
+      "destinations": [
+        {
+          "id": "destination-uuid-1",
+          "name": "Jaipur",
+          "nights": 2
+        },
+        {
+          "id": "destination-uuid-2",
+          "name": "Udaipur",
+          "nights": 3
+        }
+      ]
+    },
+    // More trips...
+  ],
+  "meta": {
+    "current_page": 1,
+    "from": 1,
+    "last_page": 5,
+    "path": "/api/trips",
+    "per_page": 20,
+    "to": 20,
+    "total": 100
+  }
+}
+```
+
+## Get Trip Details
+
+```http
+GET /api/trips/{id}
+```
+
+Returns detailed information about a specific trip.
+
+### Response
+
+```json
+{
+  "data": {
+    "id": "trip-uuid-1",
+    "name": "Magical Rajasthan Tour",
+    "description": "Experience the royal heritage of Rajasthan",
+    "highlight": "Visit majestic forts and palaces",
+    "start_date": "2023-12-01",
+    "end_date": "2023-12-08",
+    "nights": 7,
+    "price": 65000,
+    "discounted_price": 59000,
+    "currency": "INR",
+    "is_tax_included": true,
+    "deposit_amount": 15000,
+    "inclusions": [
+      "Accommodation",
+      "Daily breakfast",
+      "Transportation",
+      "Guided tours"
+    ],
+    "images": ["image1.jpg", "image2.jpg"],
+    "country": {
+      "id": "country-uuid",
+      "name": "India",
+      "code": "IN"
+    },
+    "advisor": {
+      "id": "advisor-uuid",
+      "name": "Travel Expert",
+      "image": "advisor.jpg",
+      "contact": "+91 9876543210"
+    },
+    "itineraries": [
+      {
+        "id": "itinerary-uuid",
+        "name": "Standard Package",
+        "is_group_trip": true,
+        "property_rating": 4,
+        "destinations": [
+          {
+            "id": "destination-uuid-1",
+            "name": "Jaipur",
+            "nights": 2,
+            "order": 1
+          },
+          {
+            "id": "destination-uuid-2",
+            "name": "Udaipur",
+            "nights": 3,
+            "order": 2
+          }
+        ],
+        "items": [
+          {
+            "id": "item-uuid-1",
+            "day_number": 1,
+            "item_type": "hotel",
+            "start_datetime": "2023-12-01T14:00:00",
+            "price": 12000,
+            "hotel": {
+              "id": "hotel-uuid",
+              "name": "Royal Palace Hotel",
+              "rating": 4.5
+            }
+          },
+          // More itinerary items...
+        ]
+      },
+      // More itineraries...
+    ],
+    "available_dates": [
+      {
+        "id": "date-uuid-1",
+        "start_date": "2023-12-01",
+        "end_date": "2023-12-08",
+        "available_slots": 8,
+        "total_slots": 12
+      },
+      // More available dates...
+    ]
+  }
+}
+```
+
+## Get Trip Dates
+
+```http
+GET /api/trips/{trip}/dates
+```
+
+Returns available dates for a specific trip.
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "id": "date-uuid-1",
+      "start_date": "2023-12-01",
+      "end_date": "2023-12-08",
+      "available_slots": 8,
+      "total_slots": 12
+    },
+    {
+      "id": "date-uuid-2",
+      "start_date": "2023-12-15",
+      "end_date": "2023-12-22",
+      "available_slots": 10,
+      "total_slots": 12
+    }
+  ]
+}
+```
+
+## Create Trip Session
+
+```http
+POST /api/trips/session
+```
+
+Creates a new trip session for a potential booking.
+
+### Request Body
+
+```json
+{
+  "trip_id": "trip-uuid",
+  "trip_date_id": "date-uuid",
+  "adults": 2,
+  "children": 1,
+  "room_configurations": [
+    {
+      "adults": 2,
+      "child_ages": [8]
+    }
+  ]
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "session_id": "session-uuid",
+  "expires_at": "2023-11-01T12:00:00Z",
+  "trip": {
+    "id": "trip-uuid",
+    "name": "Magical Rajasthan Tour"
+  },
+  "trip_date": {
+    "id": "date-uuid",
+    "start_date": "2023-12-01",
+    "end_date": "2023-12-08"
+  },
+  "pricing": {
+    "base_price": 65000,
+    "discounted_price": 59000,
+    "tax_amount": 0,
+    "total_amount": 59000,
+    "currency": "INR"
+  }
+}
+```
+
+## Get Trip Session
+
+```http
+GET /api/trips/session/{tripSessionId}
+```
+
+Retrieves details about a trip session.
+
+### Response
+
+```json
+{
+  "id": "session-uuid",
+  "status": "active",
+  "created_at": "2023-10-25T14:30:00Z",
+  "expires_at": "2023-11-01T12:00:00Z",
+  "trip": {
+    "id": "trip-uuid",
+    "name": "Magical Rajasthan Tour"
+  },
+  "trip_date": {
+    "id": "date-uuid",
+    "start_date": "2023-12-01",
+    "end_date": "2023-12-08"
+  },
+  "adults": 2,
+  "children": 1,
+  "room_configurations": [
+    {
+      "adults": 2,
+      "child_ages": [8]
+    }
+  ],
+  "pricing": {
+    "base_price": 65000,
+    "discounted_price": 59000,
+    "tax_amount": 0,
+    "total_amount": 59000,
+    "currency": "INR"
+  },
+  "selected_options": {
+    "hotels": [
+      {
+        "item_id": "item-uuid-1",
+        "option_id": "option-uuid-1"
+      }
+    ],
+    "activities": [
+      {
+        "item_id": "item-uuid-2",
+        "option_id": "option-uuid-2"
+      }
+    ]
+  }
+}
+```
+
+## Add Trip Session Information
+
+```http
+POST /api/trips/session/add-info
+```
+
+Updates a trip session with additional information.
+
+### Request Body
+
+```json
+{
+  "session_id": "session-uuid",
+  "selected_options": {
+    "hotels": [
+      {
+        "item_id": "item-uuid-1",
+        "option_id": "option-uuid-1"
+      }
+    ],
+    "activities": [
+      {
+        "item_id": "item-uuid-2",
+        "option_id": "option-uuid-2"
+      }
+    ]
+  }
+}
+```
+
+### Response
+
+```json
+{
+  "success": true,
+  "session_id": "session-uuid",
+  "pricing": {
+    "base_price": 65000,
+    "discounted_price": 59000,
+    "tax_amount": 0,
+    "total_amount": 59000,
+    "currency": "INR"
+  }
+}
+```
+
+## Get Trip Documents
+
+```http
+GET /api/trips/{id}/documents
+```
+
+Returns documents associated with a trip.
+
+### Response
+
+```json
+{
+  "data": [
+    {
+      "id": "document-uuid-1",
+      "name": "Itinerary PDF",
+      "file_url": "https://example.com/documents/itinerary.pdf",
+      "file_type": "application/pdf",
+      "created_at": "2023-10-20T10:00:00Z"
+    },
+    {
+      "id": "document-uuid-2",
+      "name": "Terms and Conditions",
+      "file_url": "https://example.com/documents/terms.pdf",
+      "file_type": "application/pdf",
+      "created_at": "2023-10-20T10:00:00Z"
+    }
+  ]
+}
+```
+
+## Refresh Hotel Rates
+
+```http
+POST /api/trips/{id}/refresh-hotel-rates
+```
+
+Refreshes hotel rates for a trip to ensure up-to-date pricing.
+
+### Response
+
+```json
+{
+  "success": true,
+  "message": "Hotel rates refreshed successfully",
+  "updated_items": [
+    {
+      "id": "item-uuid-1",
+      "old_price": 12000,
+      "new_price": 12500
+    },
+    {
+      "id": "item-uuid-2",
+      "old_price": 15000,
+      "new_price": 15000
+    }
+  ]
+}
+```
