@@ -16,7 +16,7 @@
       "name": "Support",
       "url": "mailto:support@often-travel.com"
     }
-  ],
+  },
   "topbarCtaButton": {
     "name": "Dashboard",
     "url": "https://dashboard.often-travel.com"
@@ -33,15 +33,15 @@
       "url": "https://github.com/often-travel"
     }
   ],
-  "navigation": [
-    {
+  "navigation": {
+    "getting-started": {
       "group": "Getting Started",
       "pages": [
         "introduction",
         "quickstart"
       ]
     },
-    {
+    "api-reference": {
       "group": "API Reference",
       "pages": [
         {
@@ -66,7 +66,7 @@
         }
       ]
     }
-  ],
+  },
   "footerSocials": {
     "twitter": "https://twitter.com/oftentravel",
     "instagram": "https://instagram.com/oftentravel",
